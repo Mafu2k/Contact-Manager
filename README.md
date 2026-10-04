@@ -1,55 +1,32 @@
 # Menedżer Kontaktów
 
-Aplikacja webowa do zarządzania listą kontaktów — dodawanie, edycja, usuwanie
-i przeglądanie wpisów. Napisana w czystym JavaScript (bez frameworka), z podziałem
-na moduły i budowana bundlerem Webpack. Dane przechowywane lokalnie w przeglądarce.
+Książka adresowa w czystym JavaScripcie, bez frameworka. Kontakty pobiera z testowego API
+[DummyJSON](https://dummyjson.com/docs/users), a na liście można je wyszukiwać, sortować,
+dodawać, edytować i usuwać. DummyJSON tylko symuluje zapis, więc zmiany nie zostają na serwerze.
+Po odświeżeniu strony wraca stan z API.
 
-## Funkcjonalności
+Rzeczy, które przydają się na co dzień, trzymam w `localStorage`:
 
-- Dodawanie nowych kontaktów
-- Edycja i usuwanie istniejących wpisów
-- Lista kontaktów z podglądem danych
-- Trwałe przechowywanie danych po stronie przeglądarki (localStorage)
-
-## Stack
-
-- JavaScript (ES modules, bez frameworka)
-- Webpack (konfiguracja osobno dla dev i prod)
-- HTML5 / CSS3
-- PWA-ready (manifest, favicony)
-
-## Struktura projektu
-
-```
-js/
-├── main.js       # punkt wejścia
-├── app.js        # inicjalizacja i spinanie modułów
-├── ui.js         # renderowanie i obsługa interfejsu
-├── api.js        # warstwa danych / operacje na kontaktach
-└── storage.js    # zapis i odczyt z localStorage
-webpack.common.js, webpack.config.dev.js, webpack.config.prod.js
-```
+- ulubione i ostatnio oglądane kontakty,
+- wybrane sortowanie,
+- szkic niedokończonego formularza,
+- kopię listy kontaktów, żeby aplikacja pokazała cokolwiek, kiedy API nie odpowiada.
 
 ## Uruchomienie
 
-Wymagania: Node.js.
-
 ```bash
 npm install
-npm start
+npm start        # serwer deweloperski webpacka
+npm run build    # wersja produkcyjna w dist/
 ```
 
-Serwer deweloperski (`webpack serve`) otworzy aplikację w przeglądarce.
-Build produkcyjny do katalogu `dist/`:
+## Kod
 
-```bash
-npm run build
-```
-
-## Autor
-
-Łukasz Janicki
+- `js/main.js` podpina zdarzenia i steruje przepływem,
+- `js/api.js` to cienka warstwa nad `fetch` do DummyJSON,
+- `js/ui.js` renderuje listę oraz obsługuje filtrowanie, sortowanie i modal,
+- `js/storage.js` zawiera wszystko, co dotyczy `localStorage`.
 
 ## Licencja
 
-MIT — szczegóły w pliku [LICENSE.txt](LICENSE.txt).
+MIT

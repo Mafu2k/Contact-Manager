@@ -1,93 +1,38 @@
 const API_URL = 'https://dummyjson.com/users';
 
+async function request(path, options = {}) {
+    const response = await fetch(`${API_URL}${path}`, options);
+    if (!response.ok) {
+        throw new Error(`Błąd HTTP: ${response.status}`);
+    }
+    return response.json();
+}
+
+function jsonBody(method, data) {
+    return {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    };
+}
+
 export async function getAllContacts() {
-    try {
-        const response = await fetch(API_URL);
-
-        if (!response.ok) {
-            throw new Error(`Błąd HTTP: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data.users;
-    } catch (error) {
-        console.error('Błąd podczas pobierania kontaktów:', error);
-        throw error;
-    }
+    const data = await request('');
+    return data.users;
 }
 
-export async function getContact(id) {
-    try {
-        const response = await fetch(`${API_URL}/${id}`);
-
-        if (!response.ok) {
-            throw new Error(`Błąd HTTP: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Błąd podczas pobierania kontaktu:', error);
-        throw error;
-    }
+export function getContact(id) {
+    return request(`/${id}`);
 }
 
-// tworzenie nowego usera
-export async function createContact(contactData) {
-    try {
-        const response = await fetch(`${API_URL}/add`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(contactData)
-        });
-
-        if (!response.ok) {
-            throw new Error(`Błąd HTTP: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Błąd podczas tworzenia kontaktu:', error);
-        throw error;
-    }
+export function createContact(contactData) {
+    return request('/add', jsonBody('POST', contactData));
 }
 
-export async function updateContact(id, contactData) {
-    try {
-        const response = await fetch(`${API_URL}/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(contactData)
-        });
-
-        if (!response.ok) {
-            throw new Error(`Błąd HTTP: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Błąd podczas aktualizacji kontaktu:', error);
-        throw error;
-    }
+export function updateContact(id, contactData) {
+    return request(`/${id}`, jsonBody('PUT', contactData));
 }
 
-// usuwanie kontaktu
-export async function deleteContact(id) {
-    try {
-        const response = await fetch(`${API_URL}/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (!response.ok) {
-            throw new Error(`Błąd HTTP: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Błąd podczas usuwania kontaktu:', error);
-        throw error;
-    }
+export function deleteContact(id) {
+    return request(`/${id}`, { method: 'DELETE' });
 }
